@@ -375,6 +375,7 @@ pref('widget.macos.titlebar-blend-mode.behind-window', true);
 // Urlbar and autocomplete
 pref("browser.urlbar.maxRichResults", 6);
 pref("browser.urlbar.trimHttps", true);
+pref("browser.urlbar.showOnlyRootAndExtension", false);
 pref("browser.search.separatePrivateDefault.ui.enabled", true);
 pref("browser.urlbar.update2.engineAliasRefresh", true);
 pref("browser.search.suggest.enabled", false);

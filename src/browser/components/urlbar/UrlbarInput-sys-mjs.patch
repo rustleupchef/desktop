@@ -1,8 +1,8 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index c504c9afc43785b5f003bb1f9f1dfbddef38d78b..b08cb1d9fee5f76070c70ea928209b15b6146cb3 100644
+index 3ab07e5864b3bb200608e7f619645f92ade129fe..0634cda8f9d39111a9085750227e7220ce6cf16a 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
-@@ -65,6 +65,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
+@@ -67,6 +67,20 @@ XPCOMUtils.defineLazyPreferenceGetter(
    false
  );
  
@@ -13,10 +13,17 @@ index c504c9afc43785b5f003bb1f9f1dfbddef38d78b..b08cb1d9fee5f76070c70ea928209b15
 +  'default'
 +);
 +
++XPCOMUtils.defineLazyPreferenceGetter(
++  lazy,
++  "showRootAndExtensionOnly",
++  "browser.urlbar.showOnlyRootAndExtension",
++  true
++);
++
  const DEFAULT_FORM_HISTORY_NAME = "searchbar-history";
  const SEARCH_BUTTON_CLASS = "urlbar-search-button";
  
-@@ -2154,6 +2161,9 @@ export class UrlbarInput {
+@@ -2152,6 +2166,9 @@ export class UrlbarInput {
  
      this.setAttribute("breakout-extend", "true");
  
@@ -26,7 +33,24 @@ index c504c9afc43785b5f003bb1f9f1dfbddef38d78b..b08cb1d9fee5f76070c70ea928209b15
      // Enable the animation only after the first extend call to ensure it
      // doesn't run when opening a new window.
      if (!this.hasAttribute("breakout-extend-animate")) {
-@@ -3901,6 +3911,11 @@ export class UrlbarInput {
+@@ -2952,6 +2969,16 @@ export class UrlbarInput {
+    *   The trimmed string
+    */
+   _trimValue(val) {
++    try {
++      // throws exception if showRootAndExtensionOnly is false as to skip the rest of the code
++      if (!lazy.showRootAndExtensionOnly) throw "skip";
++      // grabs each part of the url and returns only the rootname and extension of the url
++      const urlSegments = new URL(val).hostname.split(".");
++      if (urlSegments.length > 2) {
++        return urlSegments.slice(-2).join(".");
++      }
++      return urlSegments.join(".");
++    } catch {}
+     let trimmedValue = lazy.UrlbarPrefs.get("trimURLs")
+       ? lazy.BrowserUIUtils.trimURL(val)
+       : val;
+@@ -3875,6 +3902,11 @@ export class UrlbarInput {
    }
  
    _on_click(event) {
@@ -38,7 +62,7 @@ index c504c9afc43785b5f003bb1f9f1dfbddef38d78b..b08cb1d9fee5f76070c70ea928209b15
      if (
        event.target == this.inputField ||
        event.target == this._inputContainer ||
-@@ -4012,9 +4027,12 @@ export class UrlbarInput {
+@@ -3986,9 +4018,12 @@ export class UrlbarInput {
    }
  
    _on_mousedown(event) {
@@ -52,7 +76,7 @@ index c504c9afc43785b5f003bb1f9f1dfbddef38d78b..b08cb1d9fee5f76070c70ea928209b15
  
          if (
            event.target != this.inputField &&
-@@ -4024,8 +4042,8 @@ export class UrlbarInput {
+@@ -3998,8 +4033,8 @@ export class UrlbarInput {
            break;
          }
  
