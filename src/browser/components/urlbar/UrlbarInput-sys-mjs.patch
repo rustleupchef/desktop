@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 3ab07e5864b3bb200608e7f619645f92ade129fe..0634cda8f9d39111a9085750227e7220ce6cf16a 100644
+index 3ab07e5864b3bb200608e7f619645f92ade129fe..8c7484e5a5ba6ea9dbac990b09aaec6a9b52f468 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -67,6 +67,20 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -17,7 +17,7 @@ index 3ab07e5864b3bb200608e7f619645f92ade129fe..0634cda8f9d39111a9085750227e7220
 +  lazy,
 +  "showRootAndExtensionOnly",
 +  "browser.urlbar.showOnlyRootAndExtension",
-+  true
++  false
 +);
 +
  const DEFAULT_FORM_HISTORY_NAME = "searchbar-history";
